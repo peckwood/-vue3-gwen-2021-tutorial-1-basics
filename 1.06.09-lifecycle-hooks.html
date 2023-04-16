@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Vue 3 Basics 5 Lifecycle Hooks</title>
+        <style>
+            .box {
+                background-color: purple;
+                height: 200px;
+                width: 200px;
+            }
+            .box.two {
+                background-color: red;
+            }
+            .box.three {
+                background-color: blue;
+            }
+            [v-cloak] {
+                display: none
+            }
+        </style>
+    </head>
+    <body>
+        <div>
+            <ul>
+                <li>1:06.09 concepts</li>
+                <li>1:10:13 demo with a box</li>
+                    <p> updated will run every time data changes (isVisible in data() of app)</p>
+                <li>1:13:29 why use a lifecycle hook?</li>
+            </ul>
+        </div>
+        <hr />
+        <div id="app" v-cloak>
+            <button @click="toggleBox">Toggle Box</button>
+            <test-box v-if='isVisible'></test-box>
+        </div>
+        <script src="vue3.2.47.global.js"></script>
+        <script>
+            let app = Vue.createApp({
+                data: function(){
+                    return {
+                        isVisible: false
+                    }
+                },
+                methods:{
+                    toggleBox(){
+                        this.isVisible = !this.isVisible;
+                    }
+                },
+                updated(){
+                    console.log('app updated')
+                }
+            })
+            app.component('test-box', {
+                template: `
+                    <div class='box'></div>
+                `,
+                created(){
+                    console.log('created')
+                },
+                mounted(){
+                    console.log('mounted')
+                },
+                unmounted(){
+                    console.log('unmounted')
+                }
+                
+            })
+            app.mount('#app')
+        </script>
+    </body>
+</html>

@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Vue 3 Basics 2 Components</title>
+        <style>
+            .box {
+                background-color: purple;
+                height: 200px;
+                width: 200px;
+            }
+            .box.two {
+                background-color: red;
+            }
+            .box.three {
+                background-color: blue;
+            }
+            [v-cloak] {
+                display: none
+            }
+            input {
+                margin: 10px;
+                display: block;
+            }
+        </style>
+    </head>
+    <body>
+        <p>Components using a form</p>
+        <hr />
+        <div id="app" v-cloak>
+            <login-form />
+            <hr />
+            <button @click="toggleBox">Toggle Box</button>
+            <div v-if="isVisible4" class="box"></div>
+        </div>
+        <script src="vue3.2.47.global.js"></script>
+        <script>
+            let app = Vue.createApp({
+                data: function(){
+                    return {
+                        greeting: 'Hello Vue 3!',
+                        isVisible: false,
+                        isVisible2: false,
+                        isVisible3: true,
+                        isVisible4: false
+                    }
+                },
+                methods:{
+                    toggleBox(){
+                        this.isVisible4 = !this.isVisible4;
+                    },
+                    greet(greeting){
+                        console.log(greeting)
+                    }
+                }
+            })
+            app.component('login-form', {
+                template: `
+                    <form @submit.prevent="handleSubmit">
+                        <h1>{{title}}</h1>
+                        <input type='text' v-model='username'/>
+                        <input type='password' v-model='password'/>
+                        <button>Log in</button>
+                    </form>
+                `,
+                data(){
+                    return {
+                        title: 'Login Form',
+                        username: '',
+                        password: ''
+                    }
+                },
+                methods:{
+                    handleSubmit(){
+                        console.log('subitted');
+                        console.log('username=' + this.username);
+                        console.log('password=' + this.password);
+                    }
+                }
+            })
+            app.mount('#app')
+        </script>
+    </body>
+</html>

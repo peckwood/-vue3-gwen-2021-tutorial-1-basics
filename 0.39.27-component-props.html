@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Vue 3 Basics 3 Component Props</title>        
+        <style>
+            .box {
+                background-color: purple;
+                height: 200px;
+                width: 200px;
+            }
+            .box.two {
+                background-color: red;
+            }
+            .box.three {
+                background-color: blue;
+            }
+            [v-cloak] {
+                display: none
+            }
+            input {
+                margin: 10px;
+                display: block;
+            }
+        </style>
+    </head>
+    <body>
+        <div>
+            <ul>
+                <li>39:27 create an child component and put it inside another component</li>
+            </ul>
+        </div>
+        <hr />
+        <div id="app" v-cloak>
+            <login-form />
+        </div>
+        <script src="vue3.2.47.global.js"></script>
+        <script>
+            let app = Vue.createApp({
+                data: function(){
+                    return {
+                    }
+                }
+                
+            })
+            app.component('login-form', {
+                template: `
+                    <form @submit.prevent="handleSubmit">
+                        <h1>{{title}}</h1>
+                        <custom-input :label='usernameLabel' v-model='username' />
+                        <custom-input :label='passwordLabel' v-model='password'/>
+                        <button>Log in</button>
+                    </form>
+                `,
+                components: ['custom-input'], 
+                data(){
+                    return {
+                        title: 'Login Form',
+                        username: 'default_username',
+                        password: 'default_password',
+                        usernameLabel: 'Username',
+                        passwordLabel: 'Password'
+                    }
+                },
+                methods:{
+                    handleSubmit(){
+                        console.log('subitted');
+                        console.log('username=' + this.username);
+                        console.log('password=' + this.password);
+                    }
+                }
+            })
+            app.component('custom-input', {
+                template: `
+                    <label>
+                        {{ label }}
+                        <input type='text' v-model='inputValue'>
+                    </label>
+                `,
+                props: ['label', 'modelValue'],
+                data(){
+                    return {
+                    }
+                },
+                computed:{
+                    inputValue:{
+                        get(){
+                            return this.modelValue;
+                        },
+                        set(newValue){
+                            this.$emit('update:modelValue', newValue);
+                        }
+                    }
+                }
+            })
+            app.mount('#app')
+        </script>
+    </body>
+</html>

@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Vue 3 Basics 4 Loops</title>
+    <style>
+        .box {
+            background-color: purple;
+            height: 200px;
+            width: 200px;
+        }
+
+        .box.two {
+            background-color: red;
+        }
+
+        .box.three {
+            background-color: blue;
+        }
+
+        [v-cloak] {
+            display: none
+        }
+
+        input {
+            margin: 10px;
+            display: block;
+        }
+    </style>
+</head>
+
+<body>
+    <div>
+        <ul>
+            <li>57:29 simple loop</li>
+            <li>01:01:42 component loop</li>
+        </ul>
+    </div>
+    <hr />
+    <div id="app" v-cloak>
+        <login-form />
+    </div>
+    <script src="vue3.2.47.global.js"></script>
+    <script>
+        let app = Vue.createApp({
+            data: function () {
+                return {
+                }
+            }
+
+        })
+        app.component('login-form', {
+            template: `
+                    <form @submit.prevent="handleSubmit">
+                        <h1>{{title}}</h1>
+                        <p v-for='(str, i) in pArray' :key='i'>{{i}} {{str}}</p>
+                        <custom-input v-for='input in inputs' :label='input.label' v-model='input.value' :type='input.type'  />
+                        <button>Log in</button>
+                    </form>
+                `,
+            components: ['custom-input'],
+            data() {
+                return {
+                    title: 'Login Form',
+                    pArray: [
+                        'username',
+                        'password',
+                        'name'
+                    ],
+                    inputs: [
+                        {
+                            label: 'Username',
+                            value: '',
+                            type: 'text'
+                        },
+                        {
+                            label: 'Password',
+                            value: '',
+                            type: 'password'
+                        }
+                    ]
+                }
+            },
+            methods: {
+                handleSubmit() {
+                    console.log('subitted');
+                    console.log(this.inputs[0].value, this.inputs[1].value);
+                }
+            }
+        })
+        app.component('custom-input', {
+            template: `
+                    <label>
+                        {{ label }}
+                        <input :type='type' v-model='inputValue'>
+                    </label>
+                `,
+            props: ['label', 'type', 'modelValue'],
+            data() {
+                return {
+                }
+            },
+            computed: {
+                inputValue: {
+                    get() {
+                        return this.modelValue;
+                    },
+                    set(newValue) {
+                        this.$emit('update:modelValue', newValue);
+                    }
+                }
+            }
+        })
+        app.mount('#app')
+    </script>
+</body>
+
+</html>
